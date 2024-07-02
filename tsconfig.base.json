@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@2024-pdf-take-home/domain": ["domain/src/index.ts"],
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
