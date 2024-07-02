@@ -1,5 +1,7 @@
 <div class="grid-container">
-  <h1 class="grid-title mat-headline-medium">Dashboard</h1>
+  <h1 class="grid-title mat-headline-medium">{{stockId}}
+    <span class="mat-headline-medium--description">| Stock Analysis</span>
+  </h1>
   <mat-grid-list cols="2" rowHeight="350px">
     @for (card of cards | async; track card) {
       <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">

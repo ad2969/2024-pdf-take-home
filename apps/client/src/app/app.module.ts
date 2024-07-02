@@ -5,6 +5,7 @@ import { appRoutes } from './app.routes'
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { StockAnalysisComponent } from './stock/analysis.component';
 
 @NgModule ({
     imports: [
@@ -15,7 +16,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         
     ],
     declarations: [
-        AppComponent, DashboardComponent,
+        AppComponent,
+        DashboardComponent,
+        StockAnalysisComponent,
     ],
     bootstrap: [AppComponent]
 })

@@ -2,8 +2,14 @@
   padding: 20px;
   background: rgba(26, 27, 31, 0.05);
 }
+
 .grid-title {
   padding: 0 15px;
+}
+
+.mat-headline-medium--description {
+  color: rgba(26, 27, 31, 0.4);
+  font-size: 0.75em;
 }
 
 .dashboard-card {
@@ -23,3 +29,4 @@
 .dashboard-card-content {
   text-align: center;
 }
+
