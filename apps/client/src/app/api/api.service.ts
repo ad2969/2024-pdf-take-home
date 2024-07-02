@@ -13,6 +13,10 @@ export class ApiService {
         return this.http.get<Stock[]>(`/api/stocks/tickers/${query}`);
     }
 
+    getTickerData(ticker: string): Observable<Stock> {
+        return this.http.get<Stock>(`/api/stocks/tickers/${ticker}/detail`);
+    }
+
     getTickerBarData(ticker: string, from: number, to: number): Observable<Bar[]> {
         return this.http.get<Bar[]>(`/api/stocks/data/${ticker}/${from}/${to}`);
     }

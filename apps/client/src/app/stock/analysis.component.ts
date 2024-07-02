@@ -1,7 +1,7 @@
 import { Component, Input, inject, OnInit, OnDestroy } from '@angular/core';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
@@ -18,7 +18,7 @@ import * as HighCharts from 'highcharts/highstock';
 
 import { ApiService } from '../api/api.service';
 import { TradeService } from '../api/trade.service';
-import { Bar, Trade, News } from '@2024-pdf-take-home/domain';
+import { Bar, Trade, News, Stock } from '@2024-pdf-take-home/domain';
 
 const TWO_YEARS = 63113904000;
 const ONE_MONTH = 2629746000;
@@ -29,6 +29,7 @@ const ONE_MONTH = 2629746000;
   styleUrl: './analysis.component.scss',
   standalone: true,
   imports: [
+    NgIf,
     AsyncPipe,
     MatGridListModule,
     MatMenuModule,
@@ -63,18 +64,24 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
   );
   subscriptions: Subscription[] = [];
   
-  tickerData = new Subject<Bar[]>();
+  tickerDetails = new Subject<Stock>();
+  barData = new Subject<Bar[]>();
   newsData = new Subject<News[]>();
   tradeData: Trade[] = [];
   
   ngOnInit() {
+    // ticker data
+    const tickerDetailObserver = this.apiService.getTickerData(this.ticker);
+    const tickerDetailSubscription = tickerDetailObserver.pipe(map((result) => { this.tickerDetails.next(result) })).subscribe();
+    this.subscriptions.push(tickerDetailSubscription);
+    
+
+    // ticker candle data
     const curr = Date.now();
     const initRange = [curr - TWO_YEARS, curr]
-
-    // ticker data
-    const tickerDataObserver = this.apiService.getTickerBarData(this.ticker, initRange[0], initRange[1]);
-    const tickerDataSubscription = tickerDataObserver.pipe(map((result) => { this.tickerData.next(result) })).subscribe();
-    this.subscriptions.push(tickerDataSubscription);
+    const barDataObserver = this.apiService.getTickerBarData(this.ticker, initRange[0], initRange[1]);
+    const barDataSubscription = barDataObserver.pipe(map((result) => { this.barData.next(result) })).subscribe();
+    this.subscriptions.push(barDataSubscription);
     
     // websocket
     const tradeObserver = this.tradeService.getMessage();
@@ -86,7 +93,7 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     const newsDataSubscription = newsDataObserver.pipe(map((result) => { this.newsData.next(result) })).subscribe();
     this.subscriptions.push(newsDataSubscription);
 
-    const dataSubscription = this.tickerData.subscribe(newData => {
+    const dataSubscription = this.barData.subscribe(newData => {
       this.updateCandleChart(newData);
       this.capCandleChartView();
       if (newData.length) this.tradeService.subscribe(this.ticker, newData[newData.length-1].c);
@@ -98,10 +105,6 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.tradeService.unsubscribe(this.ticker);
   }
-  
-  // onChangeDates(e: any) {
-  //   this.dateRange.next(e.target.value);
-  // }
 
   // HIGHCHARTS
   // timestamp, open, high, low, close
@@ -154,16 +157,16 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Card 4', cols: 2, rows: 2 },
-          { title: 'News', cols: 2, rows: 4, class: 'scroll-h', news: true },
+          { title: 'Company Info', cols: 2, rows: 2, class: 'scroll', details: true },
+          { title: 'News', cols: 2, rows: 4, class: 'scroll', news: true },
           { title: 'Trades (Websocket)', cols: 2, rows: 4, class: 'scroll', trades: true },
         ];
       }
 
       return [
-        { title: 'Card 4', cols: 1, rows: 1 },
+        { title: 'Company Info', cols: 1, rows: 1, class: 'scroll', details: true },
         { title: 'Trades (Websocket)', cols: 1, rows: 3, class: 'scroll', trades: true },
-        { title: 'News', cols: 1, rows: 2, class: 'scroll-h', news: true },
+        { title: 'News', cols: 1, rows: 2, class: 'scroll', news: true },
       ];
     })
   );

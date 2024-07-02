@@ -61,6 +61,25 @@
               </table>
             }
 
+            @if (card.details) {
+              <div class="ticker-details" *ngIf="tickerDetails | async as td">
+                <div class="ticker-title">
+                  <img src="{{td.branding?.logo_url}}" alt="{{td.ticker}}" />
+                  <div class="mat-title-medium">{{td.name}} ({{td.ticker}})</div>
+                </div>
+                <div class="mat-label-medium">{{td.address?.city}}, ({{td.address?.state}})</div>
+                <hr/>
+                <div class="mat-body-medium">{{td.description}}</div>
+                <hr/>
+                <li class="mat-body-medium"><strong>Listed on</strong>: {{td.list_date}}</li>
+                <li class="mat-body-medium"><strong>Market Cap</strong>: <span style="text-transform: uppercase">{{td.currency_name}}</span> {{td.market_cap}}</li>
+                <li class="mat-body-medium"><strong>Market</strong>: {{td.market}}</li>
+                <li class="mat-body-medium"><strong>Primary Exchange</strong>: {{td.primary_exchange}}</li>
+                <li class="mat-body-medium"><strong>Share Class</strong>: {{td.share_class_figi}}</li>
+                <li class="mat-body-medium"><strong>Composite FIGI</strong>: {{td.composite_figi}}</li>
+              </div>
+            }
+
             @if (card.news) {
               <div class="news-scroller">
                 @for (news of newsData | async; track news) {
