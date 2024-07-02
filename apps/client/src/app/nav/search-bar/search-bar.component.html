@@ -6,8 +6,9 @@
 />
 <mat-autocomplete #auto="matAutocomplete">
     @for (stock of lookupResults$ | async; track stock) {
-        <mat-option [value]="stock.symbol" (click)="clickStock(stock.symbol)">
-            <span>{{stock.displaySymbol}}</span> | <span>{{ stock.description }}</span> | <span>{{ stock.type }}</span>
+        <mat-option [value]="stock.ticker" (click)="clickStock(stock.ticker)">
+            <div><strong>{{ stock.name }} ({{stock.ticker}})</strong></div>
+            <div>Currency: <span style="text-transform:uppercase">{{stock.currency_name}}</span> | Exchange: {{ stock.primary_exchange }}</div>
         </mat-option>
     }
 </mat-autocomplete>

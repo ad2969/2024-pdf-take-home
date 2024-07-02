@@ -43,7 +43,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const subscription = this.trigger.subscribe(currentValue => {
       if (currentValue === '') return;
-      this.lookupResults$ = this.apiService.lookupStocksByQuery(currentValue);
+      this.lookupResults$ = this.apiService.lookupStocksByTicker(currentValue);
     });
     this.subscriptions.push(subscription);
   }

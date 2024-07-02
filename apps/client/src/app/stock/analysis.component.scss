@@ -30,3 +30,9 @@
   text-align: center;
 }
 
+.candlestick-container {
+  width: calc(100% - 30px);
+  padding-left: 15px;
+  height: 500px;
+  max-height: 50vh;
+}
