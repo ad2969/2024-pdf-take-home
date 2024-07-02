@@ -32,6 +32,71 @@
 .dashboard-card-content.scroll {
   overflow-y: scroll;
 }
+.dashboard-card-content.scroll-h {
+  overflow-x: scroll;
+}
+
+.news-scroller {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  text-align: left;
+
+  .mat-mdc-card {
+    gap: 0.5em;
+  }
+  
+  .mat-mdc-card-title-group {
+    flex-direction: column-reverse;
+    
+    .mat-mdc-card-title {
+      padding-bottom: 0.5em;
+    }
+
+    .mat-body-medium {
+      font-weight: bold;
+    }
+  }
+  .mat-mdc-card-avatar {
+    width: fit-content;
+    height: 1em;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .mat-mdc-card-content {
+    padding-top: 0.5em;
+    border-top: lightgray 1px solid;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+  
+  }
+
+  .mat-mdc-card-footer {
+    padding: 16px;
+    padding-top: 0;
+    display: flex;
+    flex-direction: row;
+
+    a {
+      margin-left: auto;
+      display: flex;
+      align-items: flex-end;
+      color: black;
+    }
+  }
+
+  .tiny-chip {
+    font-size: 0.75rem !important;
+
+    .mdc-evolution-chip__text-label {
+      font-size: 0.75rem !important;
+    }
+  }
+}
 
 .candlestick-container {
   width: calc(100% - 30px);

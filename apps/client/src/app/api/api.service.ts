@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Bar, Stock } from "@2024-pdf-take-home/domain";
+import { Bar, News, Stock } from "@2024-pdf-take-home/domain";
 
 @Injectable({
     providedIn: 'root',
@@ -15,6 +15,10 @@ export class ApiService {
 
     getTickerBarData(ticker: string, from: number, to: number): Observable<Bar[]> {
         return this.http.get<Bar[]>(`/api/stocks/data/${ticker}/${from}/${to}`);
+    }
+
+    getTickerNewsData(ticker: string): Observable<News[]> {
+        return this.http.get<News[]>(`/api/stocks/news/${ticker}`);
     }
  
     getAllFavoriteStocks(): Observable<Stock[]> {

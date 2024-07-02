@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 
 import { HighchartsChartModule } from 'highcharts-angular';
@@ -17,7 +18,7 @@ import * as HighCharts from 'highcharts/highstock';
 
 import { ApiService } from '../api/api.service';
 import { TradeService } from '../api/trade.service';
-import { Bar, Trade } from '@2024-pdf-take-home/domain';
+import { Bar, Trade, News } from '@2024-pdf-take-home/domain';
 
 const TWO_YEARS = 63113904000;
 const ONE_MONTH = 2629746000;
@@ -34,6 +35,7 @@ const ONE_MONTH = 2629746000;
     MatIconModule,
     MatButtonModule,
     MatCardModule,
+    MatChipsModule,
     MatTableModule,
     HighchartsChartModule,
   ]
@@ -62,19 +64,27 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   
   tickerData = new Subject<Bar[]>();
+  newsData = new Subject<News[]>();
   tradeData: Trade[] = [];
   
   ngOnInit() {
     const curr = Date.now();
     const initRange = [curr - TWO_YEARS, curr]
-    const observer = this.apiService.getTickerBarData(this.ticker, initRange[0], initRange[1]);
-    const tickerDataSubscription = observer.pipe(map((result) => { this.tickerData.next(result) })).subscribe();
+
+    // ticker data
+    const tickerDataObserver = this.apiService.getTickerBarData(this.ticker, initRange[0], initRange[1]);
+    const tickerDataSubscription = tickerDataObserver.pipe(map((result) => { this.tickerData.next(result) })).subscribe();
     this.subscriptions.push(tickerDataSubscription);
     
     // websocket
     const tradeObserver = this.tradeService.getMessage();
     const tradeDataSubscription = tradeObserver.pipe(map((result) => { this.tradeData = [result, ...this.tradeData] })).subscribe();
     this.subscriptions.push(tradeDataSubscription);
+
+    // news data
+    const newsDataObserver = this.apiService.getTickerNewsData(this.ticker);
+    const newsDataSubscription = newsDataObserver.pipe(map((result) => { this.newsData.next(result) })).subscribe();
+    this.subscriptions.push(newsDataSubscription);
 
     const dataSubscription = this.tickerData.subscribe(newData => {
       this.updateCandleChart(newData);
@@ -144,16 +154,16 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Card 2', cols: 2, rows: 2 },
           { title: 'Card 4', cols: 2, rows: 2 },
-          { title: 'Trades (Websocket)', cols: 2, rows: 3, class: 'scroll', trades: true },
+          { title: 'News', cols: 2, rows: 4, class: 'scroll-h', news: true },
+          { title: 'Trades (Websocket)', cols: 2, rows: 4, class: 'scroll', trades: true },
         ];
       }
 
       return [
-        { title: 'Card 2', cols: 1, rows: 1 },
-        { title: 'Trades (Websocket)', cols: 1, rows: 2, class: 'scroll', trades: true },
         { title: 'Card 4', cols: 1, rows: 1 },
+        { title: 'Trades (Websocket)', cols: 1, rows: 3, class: 'scroll', trades: true },
+        { title: 'News', cols: 1, rows: 2, class: 'scroll-h', news: true },
       ];
     })
   );
