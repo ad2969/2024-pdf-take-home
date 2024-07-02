@@ -1,0 +1,41 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="'dialog'"
+      [mode]="'over'"
+      [opened]="false">
+    <mat-toolbar>Welcome!</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="/dashboard">Dashboard</a>
+      <a mat-list-item href="#" [disabled]="true">News</a>
+      <div class="mat-title-medium nav-divider"><span>Alternative Stocks</span></div>
+      <a mat-list-item href="#" [disabled]="true">ETFs</a>
+      <a mat-list-item href="#" [disabled]="true">Crypto</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <input matNativeControl class="stock-search" type="search" placeholder="Search for a stock (eg: TSLA)..." />
+      <div class="toolbar-buttons">
+        <button mat-icon-button disabled>
+          <mat-icon aria-label="account">notifications</mat-icon>
+        </button>
+        <mat-divider [vertical]="true">as</mat-divider>
+        <button mat-icon-button [matMenuTriggerFor]="accmenu">
+          <mat-icon aria-label="account">account_circle</mat-icon>
+        </button>
+        <mat-menu #accmenu="matMenu">
+          <a mat-menu-item href="/account/preferences">Preferences</a>
+          <button mat-menu-item disabled>Account Settings</button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>

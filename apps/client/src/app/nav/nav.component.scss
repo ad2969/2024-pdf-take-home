@@ -1,0 +1,68 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.stock-search {
+  min-width: 50%;
+  padding: 1em 2em;
+  border-radius: 1em;
+  border: none;
+  background-color: rgba(26, 27, 31, 0.05);
+}
+
+.toolbar-buttons {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: center;
+  height: 100%;
+}
+
+.toolbar-buttons .mat-divider-vertical {
+  height: 25%;
+  border-radius: 100%;
+  border-width: 2px;
+}
+
+.nav-divider {
+  padding: 0.5em 0;
+  text-align: center;
+  position: relative;
+}
+.nav-divider span {
+  background: white;
+}
+.nav-divider:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-top: 1px solid lightgray;
+  background: lightgray;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: -1;
+}
+
+// overrides
+:host ::ng-deep {
+  .mat-mdc-nav-list .mat-mdc-list-item {
+    border-radius: 0;
+  }
+}
