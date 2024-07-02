@@ -1,0 +1,13 @@
+<input #autocompleteInput matNativeControl
+    class="stock-search" type="search" placeholder="Search for a stock (eg: TSLA)..."
+    [matAutocomplete]="auto"
+    [value]="initialValue"
+    (input)="onSearch($event)"
+/>
+<mat-autocomplete #auto="matAutocomplete">
+    @for (stock of lookupResults$ | async; track stock) {
+        <mat-option [value]="stock.symbol" (click)="clickStock(stock.symbol)">
+            <span>{{stock.displaySymbol}}</span> | <span>{{ stock.description }}</span> | <span>{{ stock.type }}</span>
+        </mat-option>
+    }
+</mat-autocomplete>

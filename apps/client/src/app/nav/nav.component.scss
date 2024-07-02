@@ -3,7 +3,8 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 300px;
+  max-width: 100vw;
 }
 
 .sidenav-list .mat-icon {
@@ -28,12 +29,8 @@
   width: 100%;
 }
 
-.stock-search {
+fse-search-bar {
   min-width: 50%;
-  padding: 1em 2em;
-  border-radius: 1em;
-  border: none;
-  background-color: rgba(26, 27, 31, 0.05);
 }
 
 .toolbar-buttons {
