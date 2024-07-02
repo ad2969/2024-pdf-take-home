@@ -30,6 +30,7 @@
     "axios": "^1.7.2",
     "highcharts": "^11.4.3",
     "highcharts-angular": "^4.0.0",
+    "ngx-socket-io": "^4.7.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
