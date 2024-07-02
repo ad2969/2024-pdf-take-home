@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { Bar, Stock } from "@2024-pdf-take-home/domain";
+import { Bar, Stock, News } from "@2024-pdf-take-home/domain";
 
 type SymbolLookupResponse = {
     count: number;
@@ -20,6 +20,14 @@ type CandlesResponse = {
     next_url?: string;
     status?: string;
     results: Bar[];
+}
+
+type NewsResponse = {
+    count: number;
+    next_url?: string;
+    status?: string;
+    request_id?: string;
+    results: News[];
 }
 
 const BASE_URL = 'https://api.polygon.io';
@@ -82,6 +90,34 @@ export class StocksService {
             adjusted: true,
             queryCount: 0,
             resultsCount: 0,
+            request_id: '',
+            next_url: '',
+            status: 'NOT_OK',
+            results: []
+        }
+        return response.data;
+    }
+
+    async fetchNews(ticker: string): Promise<NewsResponse> {
+        //  Get TodoTypicodeResponse using axios
+        const response = await lastValueFrom(
+            this.httpService.get(
+                `${BASE_URL}/v2/reference/news`,
+                {
+                    headers: AUTH_HEADERS,
+                    params: {
+                        ticker: ticker.toUpperCase(),
+                        limit: 10,
+                        sort: 'published_utc',
+                    },
+                }
+            ),
+        ).catch((err) => {
+            console.error(err);
+        });
+
+        if (!response) return {
+            count: 0,
             request_id: '',
             next_url: '',
             status: 'NOT_OK',
