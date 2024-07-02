@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StocksModule } from './stocks/stocks.module';
 import { ConfigModule } from '@nestjs/config';
+import { TradesGateway } from './trades/trades.gateway';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot(), // for env vars
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TradesGateway],
 })
 export class AppModule {}
