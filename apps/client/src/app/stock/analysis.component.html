@@ -29,8 +29,38 @@
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <div>Card Content Here</div>
+          <mat-card-content class="dashboard-card-content {{card.class}}">
+            @if (card.trades) {
+              <table mat-table [dataSource]="tradeData">
+                <!-- Timestamp Column -->
+                <ng-container matColumnDef="timestamp">
+                  <th mat-header-cell *matHeaderCellDef> Timestamp </th>
+                  <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+                </ng-container>
+              
+                <!-- Exchange Column -->
+                <ng-container matColumnDef="exchange">
+                  <th mat-header-cell *matHeaderCellDef> Exchange </th>
+                  <td mat-cell *matCellDef="let element"> {{element.exchange}} </td>
+                </ng-container>
+              
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef> Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+              
+                <!-- Size Column -->
+                <ng-container matColumnDef="size">
+                  <th mat-header-cell *matHeaderCellDef> Size </th>
+                  <td mat-cell *matCellDef="let element"> {{element.size}} </td>
+                </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedTradeColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedTradeColumns;"></tr>
+              </table>
+              
+            }
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

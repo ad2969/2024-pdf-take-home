@@ -29,6 +29,9 @@
 .dashboard-card-content {
   text-align: center;
 }
+.dashboard-card-content.scroll {
+  overflow-y: scroll;
+}
 
 .candlestick-container {
   width: calc(100% - 30px);
