@@ -24,6 +24,8 @@
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/platform-socket.io": "^10.3.10",
+    "@nestjs/websockets": "^10.3.10",
     "@nrwl/angular": "^19.3.2",
     "axios": "^1.7.2",
     "highcharts": "^11.4.3",
