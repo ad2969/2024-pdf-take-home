@@ -26,6 +26,8 @@
     "@nestjs/platform-express": "^10.0.2",
     "@nrwl/angular": "^19.3.2",
     "axios": "^1.7.2",
+    "highcharts": "^11.4.3",
+    "highcharts-angular": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
