@@ -5,12 +5,15 @@ import { Stock } from "@2024-pdf-take-home/domain";
 
 type SymbolLookupResponse = {
     count: number;
-    result: Stock[];
+    request_id?: string;
+    next_url?: string;
+    status?: string;
+    results: Stock[];
 }
 
-const BASE_URL = 'https://finnhub.io/api/v1';
+const BASE_URL = 'https://api.polygon.io';
 const AUTH_HEADERS = {
-    'X-Finnhub-Token': process.env.FINNHUB_API_KEY
+    'Authorization': `Bearer ${process.env.POLYGON_API_KEY}`
 
 }
 
@@ -18,15 +21,17 @@ const AUTH_HEADERS = {
 export class StocksService {
     constructor(private readonly httpService: HttpService) {}
 
-    async fetchSymbol(queryString: string): Promise<SymbolLookupResponse> {
+    async fetchTickers(queryString: string): Promise<SymbolLookupResponse> {
         //  Get TodoTypicodeResponse using axios
         const response = await lastValueFrom(
             this.httpService.get(
-                `${BASE_URL}/search`,
+                `${BASE_URL}/v3/reference/tickers`,
                 {
                     headers: AUTH_HEADERS,
                     params: {
-                        q: queryString,
+                        ticker: queryString.toUpperCase(),
+                        active: true,
+                        limit: 20,
                     },
                 }
             ),
@@ -34,7 +39,7 @@ export class StocksService {
             console.error(err);
         });
 
-        if (!response) return { count: 0, result: [] }
+        if (!response) return { count: 0, results: [] }
         return response.data;
     }
 }

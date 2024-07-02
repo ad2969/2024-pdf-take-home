@@ -8,7 +8,7 @@ export class StocksController {
 
   @Get(':id')
   async query(@Param() params: any): Promise<Stock[]> {
-    const response = await this.stocksService.fetchSymbol(params.id);
-    return response.result;
+    const response = await this.stocksService.fetchTickers(params.id);
+    return response.results;
   }
 }
