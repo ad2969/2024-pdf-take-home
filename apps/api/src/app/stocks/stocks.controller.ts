@@ -12,6 +12,12 @@ export class StocksController {
     return response.results;
   }
 
+  @Get('/tickers/:ticker/detail')
+  async getTicker(@Param() params: any): Promise<Stock> {
+    const response = await this.stocksService.fetchTickerData(params.ticker);
+    return response.results;
+  }
+
   @Get('/data/:ticker/:from/:to')
   async getCandleData(@Param() params: any): Promise<Bar[]> {
     const response = await this.stocksService.fetchCandles(params.ticker, params.from, params.to);

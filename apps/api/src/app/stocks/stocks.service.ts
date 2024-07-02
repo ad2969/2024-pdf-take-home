@@ -3,12 +3,18 @@ import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { Bar, Stock, News } from "@2024-pdf-take-home/domain";
 
-type SymbolLookupResponse = {
+type TickerLookupResponse = {
     count: number;
     request_id?: string;
     next_url?: string;
     status?: string;
     results: Stock[];
+}
+
+type TickerDataResponse = {
+    request_id?: string;
+    status?: string;
+    results: Stock | null;
 }
 
 type CandlesResponse = {
@@ -40,7 +46,7 @@ const AUTH_HEADERS = {
 export class StocksService {
     constructor(private readonly httpService: HttpService) {}
 
-    async fetchTickers(queryString: string): Promise<SymbolLookupResponse> {
+    async fetchTickers(queryString: string): Promise<TickerLookupResponse> {
         //  Get TodoTypicodeResponse using axios
         const response = await lastValueFrom(
             this.httpService.get(
@@ -64,6 +70,28 @@ export class StocksService {
             next_url: '',
             status: 'NOT_OK',
             results: [],
+        }
+        return response.data;
+    }
+
+    async fetchTickerData(ticker: string): Promise<TickerDataResponse> {
+        //  Get TodoTypicodeResponse using axios
+        const response = await lastValueFrom(
+            this.httpService.get(
+                `${BASE_URL}/v3/reference/tickers/${ticker}`,
+                {
+                    headers: AUTH_HEADERS,
+                    params: {},
+                }
+            ),
+        ).catch((err) => {
+            console.error(err);
+        });
+
+        if (!response) return {
+            request_id: '',
+            status: 'NOT_OK',
+            results: null,
         }
         return response.data;
     }
