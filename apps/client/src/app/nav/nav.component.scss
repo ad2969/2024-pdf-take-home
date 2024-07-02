@@ -6,6 +6,17 @@
   width: 200px;
 }
 
+.sidenav-list .mat-icon {
+  transform: scale(0.75);
+}
+
+.sidenav-list .d-inline-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
+}
+
 .sidenav .mat-toolbar {
   background: inherit;
 }
