@@ -1,4 +1,4 @@
-export interface Bar {
+export interface OHCLVT {
     c: number; // closing price
     h: number; // highest price
     l: number; // lowest price

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { Bar, Stock, News } from "@2024-pdf-take-home/domain";
+import { OHCLVT, Stock, News } from "@2024-pdf-take-home/domain";
 
 type TickerLookupResponse = {
     count: number;
@@ -17,7 +17,7 @@ type TickerDataResponse = {
     results: Stock | null;
 }
 
-type CandlesResponse = {
+type OHLCVTResponse = {
     ticker: string;
     adjusted: boolean;
     queryCount: number;
@@ -25,7 +25,7 @@ type CandlesResponse = {
     request_id?: string;
     next_url?: string;
     status?: string;
-    results: Bar[];
+    results: OHCLVT[];
 }
 
 type NewsResponse = {
@@ -96,7 +96,7 @@ export class StocksService {
         return response.data;
     }
 
-    async fetchCandles(ticker: string, from: number, to: number): Promise<CandlesResponse> {
+    async fetchOHLCVT(ticker: string, from: number, to: number): Promise<OHLCVTResponse> {
         //  Get TodoTypicodeResponse using axios
         const response = await lastValueFrom(
             this.httpService.get(

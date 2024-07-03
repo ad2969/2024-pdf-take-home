@@ -18,7 +18,7 @@ import * as HighCharts from 'highcharts/highstock';
 
 import { ApiService } from '../api/api.service';
 import { TradeService } from '../api/trade.service';
-import { Bar, Trade, News, Stock } from '@2024-pdf-take-home/domain';
+import { OHCLVT, Trade, News, Stock } from '@2024-pdf-take-home/domain';
 
 const TWO_YEARS = 63113904000;
 const ONE_MONTH = 2629746000;
@@ -64,24 +64,24 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
   );
   subscriptions: Subscription[] = [];
   
-  tickerDetails = new Subject<Stock>();
-  barData = new Subject<Bar[]>();
+  stockDetails = new Subject<Stock>();
+  ohlcvtData = new Subject<OHCLVT[]>();
   newsData = new Subject<News[]>();
   tradeData: Trade[] = [];
   
   ngOnInit() {
     // ticker data
-    const tickerDetailObserver = this.apiService.getTickerData(this.ticker);
-    const tickerDetailSubscription = tickerDetailObserver.pipe(map((result) => { this.tickerDetails.next(result) })).subscribe();
-    this.subscriptions.push(tickerDetailSubscription);
+    const stockDetailObserver = this.apiService.getStockData(this.ticker);
+    const stockDetailSubscription = stockDetailObserver.pipe(map((result) => { this.stockDetails.next(result) })).subscribe();
+    this.subscriptions.push(stockDetailSubscription);
     
 
     // ticker candle data
     const curr = Date.now();
     const initRange = [curr - TWO_YEARS, curr]
-    const barDataObserver = this.apiService.getTickerBarData(this.ticker, initRange[0], initRange[1]);
-    const barDataSubscription = barDataObserver.pipe(map((result) => { this.barData.next(result) })).subscribe();
-    this.subscriptions.push(barDataSubscription);
+    const ohlcvtDataObserver = this.apiService.getStockOHLCVTData(this.ticker, initRange[0], initRange[1]);
+    const ohlcvtDataSubscription = ohlcvtDataObserver.pipe(map((result) => { this.ohlcvtData.next(result) })).subscribe();
+    this.subscriptions.push(ohlcvtDataSubscription);
     
     // websocket
     const tradeObserver = this.tradeService.getMessage();
@@ -89,11 +89,11 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     this.subscriptions.push(tradeDataSubscription);
 
     // news data
-    const newsDataObserver = this.apiService.getTickerNewsData(this.ticker);
+    const newsDataObserver = this.apiService.getStockNewsData(this.ticker);
     const newsDataSubscription = newsDataObserver.pipe(map((result) => { this.newsData.next(result) })).subscribe();
     this.subscriptions.push(newsDataSubscription);
 
-    const dataSubscription = this.barData.subscribe(newData => {
+    const dataSubscription = this.ohlcvtData.subscribe(newData => {
       this.updateCandleChart(newData);
       this.capCandleChartView();
       if (newData.length) this.tradeService.subscribe(this.ticker, newData[newData.length-1].c);
@@ -128,11 +128,11 @@ export class StockAnalysisComponent implements OnInit, OnDestroy {
     this.candleChart = chart;
   }
 
-  updateCandleChart(data: Bar[]) {
+  updateCandleChart(data: OHCLVT[]) {
     this.candleChartOptions.series = [{
       name: 'Stock Price',
       type: 'candlestick',
-      data: data.map((bar: Bar) => [bar.t, bar.o, bar.h, bar.l, bar.c]),
+      data: data.map((val: OHCLVT) => [val.t, val.o, val.h, val.l, val.c]),
     }];
     this.candleChartUpdateFlag = true;
   }
