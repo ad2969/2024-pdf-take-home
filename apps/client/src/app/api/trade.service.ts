@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const socketConfig: SocketIoConfig = {
-  url: 'http://localhost:3000',
+  url: process.env['NGX_SOCKET_URL'] || 'http://localhost:3000',
   options: {},
 };
 
