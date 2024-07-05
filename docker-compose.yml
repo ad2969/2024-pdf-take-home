@@ -1,0 +1,52 @@
+version: "3"
+services:
+  mongodb:
+    container_name: pdf-take-home-db
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata6:/data/db
+    networks:
+      - data-network
+
+  api:
+    container_name: pdf-take-home-api
+    restart: always
+    build:
+      dockerfile: ./apps/api/Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    environment:
+      POLYGON_API_KEY: ${POLYGON_API_KEY}
+      MONGODB_CONNECTION_URL: mongodb://pdf-take-home-db:27017
+    volumes:
+      - /apps/api
+    depends_on:
+      - mongodb
+    networks:
+      - data-network
+      
+  client:
+    container_name: pdf-take-home-client
+    restart: always
+    build:
+      dockerfile: ./apps/client/Dockerfile
+      context: .
+    ports:
+      - "4200:80"
+    environment:
+      NGX_API_URL: ${NGX_API_URL}
+      NGX_SOCKET_URL: ${NGX_SOCKET_URL}
+    volumes:
+    - /apps/client
+    depends_on:
+      - api
+
+networks:
+  data-network:
+    driver: bridge
+
+volumes:
+  dbdata6:
