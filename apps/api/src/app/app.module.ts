@@ -15,7 +15,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     ConfigModule.forRoot(), // for env vars
     StocksModule,
     FavoritesModule,
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot(process.env.MONGODB_CONNECTION_URL),
   ],
   controllers: [AppController],
   providers: [AppService, TradesGateway],
